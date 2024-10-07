@@ -129,11 +129,5 @@ namespace gameanalytics
         static bool isSdkReady(bool needsInitialized);
         static bool isSdkReady(bool needsInitialized, bool warn);
         static bool isSdkReady(bool needsInitialized, bool warn, std::string const& message);
-
-#if USE_UWP
-        static void OnAppSuspending(Platform::Object ^sender, Windows::ApplicationModel::SuspendingEventArgs ^e);
-        static void OnAppResuming(Platform::Object ^sender, Platform::Object ^args);
-#endif
-
     };
 } // namespace gameanalytics
