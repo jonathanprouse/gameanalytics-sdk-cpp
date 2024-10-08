@@ -717,9 +717,6 @@ namespace gameanalytics
         bool GAValidator::validateClientTs(int64_t clientTs)
         {
             constexpr int64_t k_maxTs = 99999999999;
-
-            logging::GALogger::d("clientTs = %lld", clientTs);
-
             if (clientTs < 0 || clientTs > k_maxTs)
             {
                 return false;
