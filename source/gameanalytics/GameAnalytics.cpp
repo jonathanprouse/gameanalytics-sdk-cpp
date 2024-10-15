@@ -975,6 +975,15 @@ namespace gameanalytics
         }
     }
 
+    void GameAnalytics::setFPSProvider(std::unique_ptr<gameanalytics::IFPSProvider> fpsProvider)
+    {
+        GAHealth* healthTracker = device::GADevice::getHealthTracker();
+        if(healthTracker)
+        {
+            healthTracker->setFPSProvider(std::move(fpsProvider));
+        }
+    }
+
     void GameAnalytics::enableHardwareTracking(bool value)
     {
         GAHealth* healthTracker = device::GADevice::getHealthTracker();

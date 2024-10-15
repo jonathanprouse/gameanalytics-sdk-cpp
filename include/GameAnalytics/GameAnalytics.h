@@ -93,6 +93,7 @@ namespace gameanalytics
          static void enableSDKInitEvent(bool value = true);
          static void enableMemoryHistogram(bool value = true);
          static void enableFPSHistogram(FPSTracker fpsTracker, bool value = true);
+         static void setFPSProvider(std::unique_ptr<gameanalytics::IFPSProvider> fpsProvider);
          static void enableHardwareTracking(bool value = true);
 
          ///////////

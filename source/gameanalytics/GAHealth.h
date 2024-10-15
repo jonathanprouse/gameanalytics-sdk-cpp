@@ -22,6 +22,7 @@ namespace gameanalytics
 
             void addMemoryTracker();
             void addFPSTracker(FPSTracker fpsTracker);
+            void setFPSProvider(std::unique_ptr<gameanalytics::IFPSProvider> fpsProvider);
 
             virtual void doFpsReading(float fps);
             virtual void doAppMemoryReading(int64_t memory);
@@ -53,6 +54,7 @@ namespace gameanalytics
             bool _isFPSTracked    = false;
 
             FPSTracker _fpsTracker;
+            std::unique_ptr<gameanalytics::IFPSProvider> _fpsProvider;
 
             int  getMemoryPercent(int64_t memory);
             void queryMemory();

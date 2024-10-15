@@ -10,6 +10,8 @@
 #include <array>
 #include <functional>
 
+#include "GameAnalytics/IFPSProvider.h"
+
 namespace gameanalytics
 {
     /*!

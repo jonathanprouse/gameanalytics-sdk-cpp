@@ -3,6 +3,7 @@
 #include <thread>
 
 #include "GameAnalytics/GameAnalytics.h"
+#include "GameAnalytics/DefaultFPSProvider.h"
 
 constexpr const char* GAME_KEY   = "bd624ee6f8e6efb32a054f8d7ba11618";
 constexpr const char* SECRET_KEY = "7f5c3f682cbd217841efba92e92ffb1b3b6612bc";
@@ -54,6 +55,9 @@ int main(int argc, char** argv)
     GameAnalytics::enableFPSHistogram([]() -> float {return 60.f;});
     
     GameAnalytics::setCustomDimension01("test");
+	
+	//add IFPSProvider
+	GameAnalytics::setFPSProvider(std::make_unique<DefaultFPSProvider>());
     
     using namespace std::chrono_literals;
     
@@ -66,10 +70,12 @@ int main(int argc, char** argv)
     GameAnalytics::addResourceEvent(EGAResourceFlowType::Source, "diamonds", 100, "diamonds", "big_pack_01");
     GameAnalytics::addProgressionEvent(EGAProgressionStatus::Complete, 100, "volcano", "dungeon", "dragon");
     
-    std::this_thread::sleep_for(5000ms);
+
+	
+    std::this_thread::sleep_for(25000ms);
     //testCrash();
     
-    //GameAnalytics::endSession();
+    GameAnalytics::endSession();
     
     std::cout << "test\n";
     

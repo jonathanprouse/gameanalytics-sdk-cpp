@@ -32,6 +32,12 @@ public:
 	MOCK_METHOD(int64_t, getBootTime, (), (const, override));
 };
 
+// Mock class for IFPSProvider
+class MockFPSProvider : public gameanalytics::IFPSProvider {
+public:
+	MOCK_METHOD(float, getCurrentFPS, (), (const, override));
+};
+
 // Test subclass to access protected members
 class TestableGAHealth : public GAHealth
 {
@@ -47,13 +53,14 @@ public:
 	using gameanalytics::GAHealth::_appMemoryUsage;
 	using gameanalytics::GAHealth::_sysMemoryUsage;
 	using gameanalytics::GAHealth::_totalMemory;
+	using gameanalytics::GAHealth::_fpsProvider;
 	
 	// Expose protected methods for testing
 	using gameanalytics::GAHealth::getMemoryPercent;
 };
 
 
-class GAHealthTest : public ::testing::Test
+class GAHealthTest : public ::testing::TestWithParam<float>
 {
 protected:
 	void SetUp() override
@@ -171,5 +178,30 @@ TEST_F(GAHealthTest, AddSDKInitData)
 	
 	EXPECT_EQ(sdkInitEvent["app_boot_time"], 5000);
 }
+
+// Test 8: Unit test for GAHealth's FPS provider functionality, with multiple different values
+TEST_P(GAHealthTest, TestSetFPSProviderWithMultipleFPSValues) {
+	
+	health->enableFPSTracking = true;
+	auto mockFPSProvider = std::make_unique<MockFPSProvider>();	
+
+	EXPECT_CALL(*mockFPSProvider, getCurrentFPS()).WillOnce(::testing::Return(GetParam()));
+
+	health->_fpsProvider = std::move(mockFPSProvider);
+	// Check if the FPS provider is set correctly
+	EXPECT_EQ(health->_fpsProvider->getCurrentFPS(), GetParam());
+
+}
+
+// Instantiate the test suite with multiple FPS values
+INSTANTIATE_TEST_SUITE_P(
+						 FPSValues,            // Test suite name prefix
+						 GAHealthTest,         // Name of the parameterized test suite
+						 ::testing::Values(55.0f, 60.0f, 65.0f, 70.0f, 75.0f),  // Set of parameters
+						 [](const ::testing::TestParamInfo<float>& info) {      // Optional custom name generator
+							 return "FPS_" + std::to_string(static_cast<int>(info.param));
+						 }
+						 );
+
 
 

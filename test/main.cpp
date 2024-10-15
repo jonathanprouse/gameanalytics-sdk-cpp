@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
     }
 	
 	// Run only a specific test, e.g., "GATests.testInitialize"
-//	::testing::GTEST_FLAG(filter) = "GATests.testInitialize";
+    //::testing::GTEST_FLAG(filter) = "GAHealthTest.*";
 	
 	return RUN_ALL_TESTS();
 }

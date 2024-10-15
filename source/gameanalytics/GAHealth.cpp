@@ -172,4 +172,21 @@ namespace gameanalytics
 
         }
     }
+
+    void GAHealth::setFPSProvider(std::unique_ptr<gameanalytics::IFPSProvider> fpsProvider)
+    {
+        if(!fpsProvider) return;
+        
+        _fpsProvider = std::move(fpsProvider);
+        
+        if(_fpsProvider)
+        {
+            addFPSTracker([this]()
+            {
+                float res =  _fpsProvider->getCurrentFPS();
+				return res;
+            });
+        }
+
+    }
 }
