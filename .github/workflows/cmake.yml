@@ -2,7 +2,14 @@
 # See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-multi-platform.yml
 name: CMake Build and Test 
 
-on: [push, workflow_dispatch]
+on:
+  workflow_call:
+    inputs:
+      build_type:
+        description: 'Build type (e.g., "Debug", "Release", "RelWithDebInfo", "MinSizeRel")'
+        required: true
+        type: string
+
 
 jobs:
   build:
@@ -20,7 +27,7 @@ jobs:
       # To add more build types (Release, Debug, RelWithDebInfo, etc.) customize the build_type list.
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest] 
-        build_type: [Release]
+        build_type: ${{ fromJSON(format('[{0}]', inputs.build_type || '"Debug","Release"')) }}
         c_compiler: [gcc, clang, cl]
         include:
           - os: windows-latest
@@ -86,15 +93,6 @@ jobs:
         # Adjust the path to your built library files
         cp ${{ steps.strings.outputs.build-output-dir }}/${{ matrix.build_type }}/*GameAnalytics.* ${{ steps.strings.outputs.build-output-dir }}/package/
         cp -r ${{ github.workspace }}/include ${{ steps.strings.outputs.build-output-dir }}/package/
-      
-    - name: Print Package Contents on Windows
-      if: matrix.os == 'windows-latest'
-      run: Get-ChildItem -Recurse "${{ steps.strings.outputs.build-output-dir }}\package"
-      shell: pwsh
-      
-    - name: Print Package Contents on non-Windows (Linux/macOS)
-      if: matrix.os != 'windows-latest'
-      run: ls -la ${{ steps.strings.outputs.build-output-dir }}/package
         
     - name: Upload Build Artifact
       if: ${{ success() }}
