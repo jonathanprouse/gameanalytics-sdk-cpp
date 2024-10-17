@@ -9,16 +9,6 @@ on:
 
 jobs:
   build:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/cmake.yml
     with:
-      build_type: Debug
-
-  build_pr:
-    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master'
-    strategy:
-      matrix:
-        build_type: [Debug, Release]
-    uses: ./.github/workflows/cmake.yml
-    with:
-      build_type: ${{ matrix.build_type }}
+      build_type: ${{ (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'master') && '"Debug","Release"' || '"Debug"' }}
