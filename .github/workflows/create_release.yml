@@ -64,6 +64,9 @@ jobs:
             fi
           done
 
+          # Create a zip archive of the final-release directory
+          zip -r ga-sdk-release-${{ inputs.tag_name }}.zip ./final-release
+
       - name: Show organized release files
         run: tree ./final-release
 
@@ -74,4 +77,4 @@ jobs:
           name: Release GA-CPP-SDK ${{ inputs.tag_name }}
           generate_release_notes: true
           make_latest: true
-          files: ./final-release/**/*
+          files: ga-sdk-release-${{ inputs.tag_name }}.zip
