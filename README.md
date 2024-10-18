@@ -49,10 +49,10 @@ Changelog
 How to build
 ------------
 
-Run `build.py` with the required argument for your platform:
+Run `setup.py` with the required argument for your platform:
 
 ```sh
-python build.py --platform={your platform}
+python setup.py --platform {linux_x64,linux_x86,osx,win32,win64,uwp} [--cfg {Release,Debug}] [--build] [--test] [--coverage]
 ```
 
 The following arguments are supported:
