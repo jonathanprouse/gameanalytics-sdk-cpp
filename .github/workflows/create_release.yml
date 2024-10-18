@@ -22,6 +22,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for tags and commits
+
+      - name: Set up Git credentials
+        run: |
+          git config user.name "ga-sdk-release[bot]"
+          git config user.email "ga-sdk-release[bot]@noreply.gameanalytics.com"
+
       - name: Push tag ${{ inputs.tag_name }}
         run: |
           git tag ${{ inputs.tag_name }}
