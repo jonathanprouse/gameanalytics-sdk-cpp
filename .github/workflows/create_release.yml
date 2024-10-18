@@ -1,5 +1,5 @@
 name: Create Release
-# run-name: C++ SDK Release ${{ inputs.tag_name }}
+run-name: C++ SDK Release ${{ inputs.tag_name }}
 
 on:
   workflow_dispatch:
