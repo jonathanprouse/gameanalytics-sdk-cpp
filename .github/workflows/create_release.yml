@@ -42,8 +42,30 @@ jobs:
         with:
           path: ./release-artifacts
 
-      - name: Show downloaded artifacts
-        run: ls -l ./release-artifacts
+      - name: Organize release files
+        run: |
+          # Create the base include directory in the final release
+          mkdir -p ./final-release/include
+      
+          # Copy the entire include directory from one of the platform folders (assuming they are the same across platforms)
+          cp -r ./release-artifacts/ga-cpp-sdk-macOS-latest-clang-Release/include/* ./final-release/include/
+      
+          # Dynamically find all platform directories
+          platform_dirs=$(find ./release-artifacts -mindepth 1 -maxdepth 1 -type d)
+      
+          # Iterate over each platform directory and copy the respective binaries
+          for platform in $platform_dirs; do
+            platform_name=$(basename $platform)
+            mkdir -p ./final-release/$platform_name
+            if [[ $platform_name == *"windows"* ]]; then
+              cp $platform/*.lib ./final-release/$platform_name/
+            else
+              cp $platform/*.a ./final-release/$platform_name/
+            fi
+          done
+
+      - name: Show organized release files
+        run: tree ./final-release
 
       - name: Create release
         uses: softprops/action-gh-release@v2.0.8
@@ -52,4 +74,4 @@ jobs:
           name: Release GA-CPP-SDK ${{ inputs.tag_name }}
           generate_release_notes: true
           make_latest: true
-          files: ./release-artifacts/*
+          files: ./final-release/**/*
