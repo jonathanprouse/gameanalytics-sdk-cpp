@@ -5,7 +5,7 @@ on:
     branches: ['*']  # Trigger on push events for all branches
     tags-ignore: ['*']  # Ignore push events on all tags
   pull_request:
-    branches: ['master']  # Trigger on pull requests to master
+    branches: ['main']  # Trigger on pull requests to main
   workflow_dispatch:  # Allow manual triggering of workflow
 
 jobs:
